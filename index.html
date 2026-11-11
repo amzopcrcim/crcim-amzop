@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRCIM-AMZOP | Conselho Regional de Controladores Internos Municipais</title>
+    <!-- Favicon para a Guia do Navegador -->
+    <link rel="icon" type="image/png" href="logo_crcim.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crcim: {
+                            vinho: '#7A1418',
+                            vinhoscuro: '#540C10',
+                            vinhofundo: '#3A070A',
+                            rubro: '#A32A2F',
+                            dourado: '#C59B27',
+                            douraclaro: '#E5C058',
+                            cinza: '#F8F6F6',
+                            texto: '#2B2B2B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .bg-gradient-crcim {
+            background: linear-gradient(135deg, #7A1418 0%, #540C10 100%);
+        }
+    </style>
+</head>
+<body class="font-sans bg-white text-crcim-texto antialiased flex flex-col min-h-screen">
+
+    <!-- BANNER DE COOKIES (LGPD) -->
+<div id="cookie-banner" class="fixed bottom-4 left-4 right-4 md:left-8 md:right-auto md:max-w-md bg-white border border-gray-200 shadow-2xl rounded-2xl p-5 z-50 hidden transition-all duration-300">
+    <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-full bg-crcim-dourado/20 text-crcim-vinho flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-cookie-bite text-lg"></i>
+        </div>
+        <div class="space-y-2">
+            <h4 class="font-bold text-sm text-crcim-vinho">Valorizamos sua privacidade</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">
+                Utilizamos cookies essenciais para garantir o correto funcionamento do portal e melhorar a sua experiência de navegação. 
+                Saiba mais na nossa <button onclick="openPolicyModal('privacidade')" class="text-crcim-vinho font-semibold underline hover:text-crcim-rubro">Política de Privacidade</button>.
+            </p>
+            <div class="flex items-center gap-2 pt-2">
+                <button onclick="acceptCookies()" class="bg-crcim-vinho hover:bg-crcim-vinhoscuro text-white text-xs font-bold py-2 px-4 rounded-lg transition shadow">
+                    Aceitar Cookies
+                </button>
+                <button onclick="openPolicyModal('privacidade')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 px-3 rounded-lg transition">
+                    Ver Políticas
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE POLÍTICA DE PRIVACIDADE E TERMOS DE USO -->
+<div id="modal-policy" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+        <button onclick="closePolicyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-crcim-vinho text-xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- CABEÇALHO DO MODAL -->
+        <span class="bg-crcim-vinho text-white font-bold text-xs px-3 py-1 rounded-full uppercase">Documento Institucional</span>
+        <h3 id="policy-title" class="text-xl sm:text-2xl font-bold text-crcim-vinho mt-3 mb-4"></h3>
+
+        <!-- CONTEÚDO DINÂMICO DA POLÍTICA -->
+        <div id="policy-body" class="text-gray-700 text-sm leading-relaxed border-t border-gray-100 pt-4 space-y-4"></div>
+
+        <div class="mt-6 text-right border-t border-gray-100 pt-4">
+            <button onclick="closePolicyModal()" class="bg-crcim-vinho text-white px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-crcim-vinhoscuro transition">
+                Entendi e Fechar
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- CABEÇALHO / NAVEGAÇÃO -->
+    <header class="sticky top-0 z-40 bg-white shadow-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- LOGO E IDENTIDADE -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-crcim-cinza border border-gray-200 group-hover:border-crcim-vinho transition p-1">
+                        <img src="logo_crcim.png" alt="Logo CRCIM-AMZOP" class="w-full h-full object-contain">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold tracking-wider text-crcim-rubro uppercase">Conselho Regional</span>
+                        <span class="text-base sm:text-lg font-extrabold text-crcim-vinho leading-tight uppercase">CRCIM - AMZOP</span>
+                        <span class="text-[10px] text-gray-500 font-medium">Controladores Internos Municipais da Região da AMZOP</span>
+                    </div>
+                </a>
+
+                <!-- MENU DESKTOP -->
+                <nav class="hidden lg:flex items-center space-x-8 font-semibold text-sm">
+                    <a href="#" class="text-crcim-vinho hover:text-crcim-rubro transition">Início</a>
+                    <a href="#noticias" class="text-gray-700 hover:text-crcim-vinho transition">Notícias</a>
+                    <a href="#municipios" class="text-gray-700 hover:text-crcim-vinho transition">Municípios Integrantes</a>
+                    <a href="#sobre" class="text-gray-700 hover:text-crcim-vinho transition">Sobre o Conselho</a>
+                    <a href="#diretoria" class="text-gray-700 hover:text-crcim-vinho transition">Diretoria Executiva</a>
+                </nav>
+
+                <!-- BOTÃO MENU MOBILE -->
+                <button id="mobile-menu-btn" class="lg:hidden text-crcim-vinho focus:outline-none p-2 rounded-md hover:bg-gray-100">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MENU MOBILE DROPDOWN -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
+            <a href="#" class="block py-2 text-crcim-vinho border-b border-gray-100">Início</a>
+            <a href="#noticias" class="block py-2 text-gray-700 hover:text-crcim-vinho border-b border-gray-100">Notícias</a>
+            <a href="#municipios" class="block py-2 text-gray-700 hover:text-crcim-vinho border-b border-gray-100">Municípios Integrantes</a>
+            <a href="#sobre" class="block py-2 text-gray-700 hover:text-crcim-vinho border-b border-gray-100">Sobre o Conselho</a>
+            <a href="#diretoria" class="block py-2 text-gray-700 hover:text-crcim-vinho">Diretoria Executiva</a>
+        </div>
+    </header>
+
+    <!-- BANNER HERO PRINCIPAL -->
+    <section class="relative bg-gradient-crcim text-white py-12 lg:py-16 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- COLUNA ESQUERDA: APRESENTAÇÃO -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-crcim-dourado/20 border border-crcim-dourado/40 px-3 py-1.5 rounded-full text-crcim-douraclaro text-xs font-bold uppercase tracking-wide">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Região da AMZOP • Rio Grande do Sul</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                        Controle Interno, <span class="text-crcim-douraclaro">Governança</span> e Transparência
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-gray-200 font-light leading-relaxed">
+                        Fortalecendo as Unidades Centrais de Controle Interno (UCCIs) dos 28 municípios da Região da AMZOP.
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <a href="#municipios" class="bg-crcim-dourado hover:bg-crcim-douraclaro text-crcim-vinhofundo font-bold px-6 py-3.5 rounded-lg shadow-lg hover:shadow-xl transition flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <i class="fa-solid fa-city"></i>
+                            <span>Municípios Integrantes da AMZOP</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- COLUNA DIREITA: CARROSSEL DE EVENTOS E DESTAQUES -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white text-crcim-texto rounded-2xl p-6 shadow-2xl relative border border-gray-100">
+                        
+                        <!-- BARRA SUPERIOR E BADGE -->
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-200 mb-3">
+                            <div class="flex items-center gap-2 text-crcim-vinho font-bold text-base sm:text-lg">
+                                <i class="fa-regular fa-calendar-check text-xl text-crcim-dourado"></i>
+                                <span>Eventos & Destaques</span>
+                            </div>
+                            <span class="text-xs bg-crcim-vinho text-white font-semibold px-2.5 py-1 rounded">2026</span>
+                        </div>
+
+                        <!-- BARRA DE PROGRESSO DO TEMPO ATÉ O PRÓXIMO EVENTO -->
+                        <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden mb-4 border border-gray-200">
+                            <div id="carousel-progress" class="bg-crcim-vinho h-full w-0 transition-all ease-linear"></div>
+                        </div>
+
+                        <!-- CONTÊINER DOS SLIDES -->
+                        <div class="relative overflow-hidden min-h-[250px]">
+                            
+                            <!-- SLIDE 1: III ENCONTRO REGIONAL (12 DE NOVEMBRO) -->
+                            <div class="event-slide transition-opacity duration-500 block space-y-3">
+                                <div class="inline-block bg-crcim-dourado text-crcim-vinhofundo text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
+                                    Inscrições Abertas
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-extrabold text-crcim-vinho leading-snug">
+                                    III Encontro Regional de Controladores Internos
+                                </h3>
+                                <div class="space-y-1.5 text-xs sm:text-sm text-gray-700">
+                                    <p class="flex items-center gap-2">
+                                        <i class="fa-regular fa-calendar-check text-crcim-vinho"></i>
+                                        <span><strong>Data:</strong> 12 de Novembro • 08h30 às 16h</span>
+                                    </p>
+                                    <p class="flex items-center gap-2">
+                                        <i class="fa-solid fa-location-dot text-crcim-vinho"></i>
+                                        <span><strong>Local:</strong> AMZOP – Av. Flores da Cunha, 2500, Seberi/RS</span>
+                                    </p>
+                                    <p class="flex items-start gap-2 pt-1 text-gray-600">
+                                        <i class="fa-solid fa-users-rectangle text-crcim-dourado mt-1"></i>
+                                        <span><strong>Palestras:</strong> Compras Públicas (Ana Paula Costa), Transferegov (Luiza Bertholdo) e Rotinas de Controle (Aline da Rocha).</span>
+                                    </p>
+                                </div>
+                                <div class="pt-1">
+                                    <a href="https://www.instagram.com/p/Dert3TCFJHo/?dlrf=Z3B1cHRwYmg0bGNh" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-crcim-vinho hover:bg-crcim-vinhoscuro text-white font-bold text-xs px-4 py-2 rounded-lg transition">
+                                        <i class="fa-brands fa-instagram"></i>
+                                        <span>Garantir Vaga / Detalhes</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2: CANAL DE ORIENTAÇÃO TÉCNICA & SUPORTE ÀS UCCIs -->
+                            <div class="event-slide transition-opacity duration-500 hidden space-y-3">
+                                <div class="inline-block bg-crcim-vinho text-white text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
+                                    Suporte Permanente
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-extrabold text-crcim-vinho leading-snug">
+                                    Canal de Orientação Técnica & Suporte às UCCIs
+                                </h3>
+                                <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                    Espaço permanente para troca de experiências, harmonização de entendimentos e orientação preventiva em processos administrativos, rotinas de auditoria e fiscalização nos 28 municípios consorciados.
+                                </p>
+                                <div class="bg-crcim-cinza p-3 rounded-lg border border-gray-200 text-xs text-gray-700 flex items-center gap-3">
+                                    <i class="fa-solid fa-headset text-2xl text-crcim-dourado"></i>
+                                    <div>
+                                        <p class="text-crcim-vinho font-bold">Assessoramento Técnico Regional</p>
+                                        <p class="text-[11px] text-gray-500 font-normal">Integração contínua entre as controladorias municipais</p>
+                                    </div>
+                                </div>
+                                <div class="pt-1">
+                                    <a href="mailto:crcim@amzop.com.br" class="inline-flex items-center gap-2 bg-crcim-vinho hover:bg-crcim-vinhoscuro text-white font-bold text-xs px-4 py-2.5 rounded-lg transition">
+                                        <i class="fa-regular fa-envelope"></i>
+                                        <span>Contato Institucional</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 3: CONVITE PARA SEGUIR O INSTAGRAM -->
+                            <div class="event-slide transition-opacity duration-500 hidden space-y-3">
+                                <div class="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
+                                    Redes Sociais
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-extrabold text-crcim-vinho leading-snug">
+                                    Siga o CRCIM-AMZOP no Instagram!
+                                </h3>
+                                <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                    Acompanhe em primeira mão os nossos eventos, orientações técnicas, fotos de capacitações e bastidores do controle interno regional.
+                                </p>
+                                <div class="bg-crcim-cinza p-3 rounded-lg border border-gray-200 text-xs text-gray-700 flex items-center gap-3">
+                                    <i class="fa-brands fa-instagram text-2xl text-pink-600"></i>
+                                    <div>
+                                        <p class="text-crcim-vinho font-bold">@crcim.amzop</p>
+                                        <p class="text-[11px] text-gray-500 font-normal">Perfil oficial no Instagram</p>
+                                    </div>
+                                </div>
+                                <div class="pt-1">
+                                    <a href="https://www.instagram.com/crcim.amzop" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white font-bold text-xs px-4 py-2.5 rounded-lg hover:opacity-90 transition shadow">
+                                        <i class="fa-brands fa-instagram text-sm"></i>
+                                        <span>Seguir no Instagram</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- CONTROLES DO CARROSSEL: PONTOS, BOTÃO PAUSAR E SETAS -->
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-4">
+                            <div class="flex items-center space-x-3">
+                                <button id="pause-btn" onclick="togglePause()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-crcim-vinho hover:text-white text-crcim-vinho flex items-center justify-center transition border border-gray-200" title="Pausar / Reproduzir Rotação">
+                                    <i id="pause-icon" class="fa-solid fa-pause text-xs"></i>
+                                </button>
+                                <div class="flex space-x-2" id="carousel-dots">
+                                    <button onclick="setSlide(0)" class="w-3 h-3 rounded-full bg-crcim-vinho transition" aria-label="Slide 1"></button>
+                                    <button onclick="setSlide(2)" class="w-3 h-3 rounded-full bg-gray-300 transition" aria-label="Slide 2"></button>
+                                    <button onclick="setSlide(2)" class="w-3 h-3 rounded-full bg-gray-300 transition" aria-label="Slide 3"></button>
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <button onclick="prevSlide()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-crcim-vinho hover:text-white text-crcim-vinho flex items-center justify-center transition border border-gray-200">
+                                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                                </button>
+                                <button onclick="nextSlide()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-crcim-vinho hover:text-white text-crcim-vinho flex items-center justify-center transition border border-gray-200">
+                                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- NOTÍCIAS & COMUNICADOS OFICIAIS (INSTAGRAM) -->
+    <section id="noticias" class="py-16 bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 pb-4 border-b border-gray-100">
+                <div>
+                    <span class="text-crcim-rubro font-bold text-xs uppercase tracking-widest">Informa AMZOP</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-crcim-vinho">Notícias & Comunicados Oficiais</h2>
+                </div>
+                <p class="text-gray-500 text-sm mt-2 md:mt-0">Acompanhe nossas publicações oficiais no Instagram</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- NOTÍCIA 1: 19/10/2026 -->
+                <article class="bg-crcim-cinza border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between md:col-span-2 lg:col-span-1">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-crcim-dourado text-crcim-vinhofundo font-bold text-xs px-2.5 py-1 rounded">III Encontro Regional</span>
+                            <span class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i>19/10/2026</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-crcim-vinho mb-3 leading-snug">
+                            📢 Inscrições Abertas para o III Encontro Regional de Controladores Internos
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                            Evento no dia 12 de Novembro na sede da AMZOP em Seberi com palestras sobre Compras Públicas (SICX/Contrata+Brasil), Transferegov e estruturação de rotinas de controle interno.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        <a href="https://www.instagram.com/p/Dert3TCFJHo" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition shadow">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Ver publicação no Instagram</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- NOTÍCIA 4: 17/04/2026 -->
+                <article class="bg-crcim-cinza border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-crcim-vinho text-white font-bold text-xs px-2.5 py-1 rounded">Encontro Regional URI</span>
+                            <span class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i>17/04/2026</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-crcim-vinho mb-3 leading-snug">
+                            Participação no Encontro Regional de Gestão de Pessoas na URI
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                            O CRCIM-AMZOP esteve presente no evento em Frederico Westphalen voltado à qualificação técnica, capital humano e governança nos processos administrativos da gestão pública.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        <a href="https://www.instagram.com/p/DXP2W38GVJ1" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition shadow">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Ver publicação no Instagram</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- NOTÍCIA 3: 13/07/2025 -->
+                <article class="bg-crcim-cinza border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-crcim-vinho text-white font-bold text-xs px-2.5 py-1 rounded">Capacitação TCE-RS</span>
+                            <span class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i>13/07/2025</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-crcim-vinho mb-3 leading-snug">
+                            Capacitação em Seberi aborda Reforma Tributária e Auditoria
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                            Com apoio do TCE-RS e participação dos especialistas Thiago Felker Andreis, Mário da Rosa e Jacson Bueno de Lima, o encontro abordou padronização dos trabalhos e eficiência na aplicação dos recursos públicos.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        <a href="https://www.instagram.com/p/DMDQAxmusQ0" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition shadow">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Ver publicação no Instagram</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- NOTÍCIA 2: 04/04/2025 -->
+                <article class="bg-crcim-cinza border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-crcim-dourado text-crcim-vinhofundo font-bold text-xs px-2.5 py-1 rounded">Aniversário 1 Ano</span>
+                            <span class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i>04/04/2025</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-crcim-vinho mb-3 leading-snug">
+                            Hoje a CRCIM completa 1 ano! 🎂🎈🥳
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                            Há 12 meses, iniciamos um caminho repleto de conquistas, promovendo a transparência, troca de experiências, parcerias municipais e capacitações pelo fortalecimento da boa governança.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        <a href="https://www.instagram.com/p/DIB2XUsO0Cz" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition shadow">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Ver publicação no Instagram</span>
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- NOTÍCIA 1: 11/03/2025 -->
+                <article class="bg-crcim-cinza border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-crcim-vinho text-white font-bold text-xs px-2.5 py-1 rounded">Reunião de Alinhamento</span>
+                            <span class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i>11/03/2025</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-crcim-vinho mb-3 leading-snug">
+                            Diálogo e planejamento de ações marcam encontro com a presidência da AMZOP
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                            O presidente da AMZOP e prefeito de Seberi, Adilson Balestrin, reuniu-se com membros do Conselho dos Controladores Internos para alinhar estratégias e fortalecer o diálogo entre os municípios regionais.
+                        </p>
+                    </div>
+                    <div class="px-6 pb-6 pt-2">
+                        <a href="https://www.instagram.com/p/DHD2Z4quuIF" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition shadow">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Ver publicação no Instagram</span>
+                        </a>
+                    </div>
+                </article>
+
+                
+
+                
+
+                
+
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MUNICÍPIOS INTEGRANTES DA AMZOP -->
+    <section id="municipios" class="py-16 bg-crcim-cinza border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
+                <div>
+                    <span class="text-crcim-rubro font-bold text-xs uppercase tracking-widest">Abrangência Territorial</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-crcim-vinho">Municípios Integrantes da AMZOP</h2>
+                    <p class="text-gray-600 text-sm mt-1">Rede de Unidades Centrais de Controle Interno das 28 cidades consorciadas</p>
+                </div>
+                
+                <!-- CAMPO DE BUSCA DE MUNICÍPIOS -->
+                <div class="mt-4 md:mt-0 w-full md:w-72 relative">
+                    <input type="text" id="search-muni" onkeyup="filterMunicipios()" placeholder="Buscar município..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-crcim-vinho text-sm">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-gray-400 text-sm"></i>
+                </div>
+            </div>
+
+            <!-- GRID DOS 28 MUNICÍPIOS ASSOCIADOS DA AMZOP -->
+            <div id="grid-municipios" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Inserido dinamicamente via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE O CONSELHO (ESTRUTURA INSTITUCIONAL) -->
+    <section id="sobre" class="py-16 bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <div>
+                        <span class="text-crcim-rubro font-bold text-xs uppercase tracking-widest">Institucional</span>
+                        <h2 class="text-3xl font-extrabold text-crcim-vinho mt-1">O Conselho Regional de Controladores Internos</h2>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base">
+                        O <strong>CRCIM-AMZOP</strong> é o órgão técnico integrador dos auditores e controladores internos dos municípios pertencentes à Associação dos Municípios da Zona da Produção (AMZOP), no norte do Estado do Rio Grande do Sul.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base">
+                        Atuando de forma autônoma e colaborativa, o conselho visa à harmonização de entendimentos, cooperação mútua na resolução de consultas fiscais e fortalecimento institucional do Controle Interno Municipal perante os órgãos de controle externo.
+                    </p>
+                </div>
+
+                <!-- PILARES REGIONAIS DE ATUAÇÃO COM DESTAQUE EXPANDIDO -->
+                <div class="lg:col-span-6 bg-crcim-vinho text-white rounded-2xl p-8 shadow-xl relative overflow-hidden">
+                    <div class="relative z-10 space-y-6">
+                        <h3 class="text-xl font-extrabold text-crcim-douraclaro border-b border-white/20 pb-4">
+                            Pilares Regionais de Atuação
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 p-5 rounded-xl flex items-center gap-4 hover:border-crcim-dourado transition">
+                                <div class="w-12 h-12 rounded-lg bg-crcim-dourado text-crcim-vinhofundo flex items-center justify-center font-bold text-xl shrink-0">
+                                    <i class="fa-solid fa-handshake"></i>
+                                </div>
+                                <span class="text-base sm:text-lg font-extrabold text-white leading-tight">Articulação Externa</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 p-5 rounded-xl flex items-center gap-4 hover:border-crcim-dourado transition">
+                                <div class="w-12 h-12 rounded-lg bg-crcim-dourado text-crcim-vinhofundo flex items-center justify-center font-bold text-xl shrink-0">
+                                    <i class="fa-solid fa-scale-balanced"></i>
+                                </div>
+                                <span class="text-base sm:text-lg font-extrabold text-white leading-tight">Normatização Técnica</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 p-5 rounded-xl flex items-center gap-4 hover:border-crcim-dourado transition">
+                                <div class="w-12 h-12 rounded-lg bg-crcim-dourado text-crcim-vinhofundo flex items-center justify-center font-bold text-xl shrink-0">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <span class="text-base sm:text-lg font-extrabold text-white leading-tight">Capacitação Permanente</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 p-5 rounded-xl flex items-center gap-4 hover:border-crcim-dourado transition">
+                                <div class="w-12 h-12 rounded-lg bg-crcim-dourado text-crcim-vinhofundo flex items-center justify-center font-bold text-xl shrink-0">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <span class="text-base sm:text-lg font-extrabold text-white leading-tight">Apoio Preventivo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIRETORIA EXECUTIVA & CONSELHO FISCAL -->
+    <section id="diretoria" class="py-16 bg-crcim-cinza border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-crcim-rubro font-bold text-xs uppercase tracking-widest">Representação Regional</span>
+                <h2 class="text-3xl font-extrabold text-crcim-vinho mt-1">Diretoria Executiva & Conselho Fiscal</h2>
+                <p class="text-gray-600 text-sm mt-2">Controladores eleitos para a gestão do Conselho Regional na Região da AMZOP</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- PRESIDÊNCIA -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-center">
+                    <div class="w-16 h-16 rounded-full bg-crcim-vinho text-crcim-douraclaro flex items-center justify-center mx-auto text-2xl mb-4 font-bold">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <span class="text-xs bg-crcim-dourado/20 text-crcim-vinho font-bold px-2.5 py-1 rounded-full uppercase">Presidente</span>
+                    <h3 class="text-base font-bold text-crcim-vinho mt-3">Eduardo Gerlach Santos</h3>
+                    <p class="text-xs text-gray-500 font-medium mt-1">Palmeira das Missões</p>
+                </div>
+
+                <!-- VICE-PRESIDÊNCIA -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-center">
+                    <div class="w-16 h-16 rounded-full bg-crcim-vinho text-crcim-douraclaro flex items-center justify-center mx-auto text-2xl mb-4 font-bold">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <span class="text-xs bg-crcim-dourado/20 text-crcim-vinho font-bold px-2.5 py-1 rounded-full uppercase">Vice-Presidente</span>
+                    <h3 class="text-base font-bold text-crcim-vinho mt-3">Ana Cristina</h3>
+                    <p class="text-xs text-gray-500 font-medium mt-1">Zona das Missões</p>
+                </div>
+
+                <!-- SECRETARIO -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-center">
+                    <div class="w-16 h-16 rounded-full bg-crcim-vinho text-crcim-douraclaro flex items-center justify-center mx-auto text-2xl mb-4 font-bold">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                    <span class="text-xs bg-crcim-dourado/20 text-crcim-vinho font-bold px-2.5 py-1 rounded-full uppercase">Secretário</span>
+                    <h3 class="text-base font-bold text-crcim-vinho mt-3">Leandro</h3>
+                    <p class="text-xs text-gray-500 font-medium mt-1">Região da Produção</p>
+                </div>
+
+                <!-- 2º Secretário -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-center">
+                    <div class="w-16 h-16 rounded-full bg-crcim-vinho text-crcim-douraclaro flex items-center justify-center mx-auto text-2xl mb-4 font-bold">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <span class="text-xs bg-crcim-dourado/20 text-crcim-vinho font-bold px-2.5 py-1 rounded-full uppercase">2º Secretário</span>
+                    <h3 class="text-base font-bold text-crcim-vinho mt-3">Leandro</h3>
+                    <p class="text-xs text-gray-500 font-medium mt-1">AMZOP</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ INSTITUCIONAL AMZOP (MANTIDO COMPLETO COM E-MAIL E LINKS ÚTEIS) -->
+    <footer class="bg-crcim-vinhofundo text-white border-t-4 border-crcim-dourado mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                
+                <!-- COLUNA 1: IDENTIDADE -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded bg-white p-1">
+                            <img src="logo_crcim.png" alt="Logo CRCIM-AMZOP" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base uppercase text-crcim-douraclaro">CRCIM - AMZOP</h3>
+                            <p class="text-xs text-gray-300">Conselho Regional de Controladores Internos Municipais</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed max-w-md">
+                        Órgão regional de integração e assessoramento técnico das Unidades Centrais de Controle Interno dos 28 municípios consorciados à Associação dos Municípios da Zona da Produção (AMZOP).
+                    </p>
+                    <div class="pt-2 text-xs text-gray-300 space-y-1">
+                        <p><i class="fa-solid fa-location-dot text-crcim-dourado mr-2"></i>Sede Administrativa AMZOP: Av. General Neto, 150 - Seberi / RS</p>
+                        <p><i class="fa-regular fa-envelope text-crcim-dourado mr-2"></i>E-mail: <a href="mailto:crcim@amzop.com.br" class="hover:underline">crcim@amzop.com.br</a></p>
+                    </div>
+                </div>
+
+                <!-- COLUNA 2: NAVEGAÇÃO -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-crcim-douraclaro uppercase tracking-wider border-b border-white/10 pb-2">Navegação</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#" class="hover:text-crcim-douraclaro transition">Início</a></li>
+                        <li><a href="#noticias" class="hover:text-crcim-douraclaro transition">Notícias & Comunicados</a></li>
+                        <li><a href="#municipios" class="hover:text-crcim-douraclaro transition">Municípios Integrantes</a></li>
+                        <li><a href="#sobre" class="hover:text-crcim-douraclaro transition">Sobre o Conselho</a></li>
+                        <li><a href="#diretoria" class="hover:text-crcim-douraclaro transition">Diretoria Executiva</a></li>
+                    </ul>
+                </div>
+
+                <!-- COLUNA 3: ÓRGÃOS E LINKS ÚTEIS (NA ORDEM SOLICITADA) -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-crcim-douraclaro uppercase tracking-wider border-b border-white/10 pb-2">Links Institucionais</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="https://www.instagram.com/crcim.amzop" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition font-semibold text-crcim-douraclaro"><i class="fa-brands fa-instagram text-xs mr-1"></i>Instagram</a></li>
+                        <li><a href="https://amzop.com.br" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1 text-crcim-dourado"></i>AMZOP</a></li>
+                        <li><a href="https://famurs.com.br" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1 text-crcim-dourado"></i>FAMURS</a></li>
+                        <li><a href="https://tce.rs.gov.br" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1 text-crcim-dourado"></i>TCE-RS</a></li>
+                        <li><a href="https://tcu.gov.br" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1 text-crcim-dourado"></i>TCU</a></li>
+                        <li><a href="https://siconfi.tesouro.gov.br" target="_blank" rel="noopener" class="hover:text-crcim-douraclaro transition"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] mr-1 text-crcim-dourado"></i>SICONFI</a></li>
+                        <!-- Adicionar no rodapé na lista de links -->
+                        <li>
+                            <button onclick="openPolicyModal('privacidade')" class="hover:text-crcim-douraclaro transition text-xs text-gray-300 flex items-center gap-1">
+                                <i class="fa-solid fa-shield-halved text-[10px] text-crcim-dourado"></i>
+                                <span>Política de Privacidade & Cookies</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="openPolicyModal('termos')" class="hover:text-crcim-douraclaro transition text-xs text-gray-300 flex items-center gap-1">
+                                <i class="fa-solid fa-file-contract text-[10px] text-crcim-dourado"></i>
+                                <span>Termos de Uso</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+                <p>&copy; 2026 CRCIM-AMZOP. Todos os direitos reservados.</p>
+                <a href="#" class="hover:text-crcim-douraclaro transition flex items-center gap-1">
+                    <span>Voltar ao topo</span>
+                    <i class="fa-solid fa-arrow-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL LEITOR DE NOTÍCIAS -->
+    <div id="modal-noticia" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeNewsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-crcim-vinho text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span class="bg-crcim-vinho text-white font-bold text-xs px-3 py-1 rounded-full uppercase">Comunicado Oficial</span>
+            <h3 id="modal-title" class="text-xl sm:text-2xl font-bold text-crcim-vinho mt-3 mb-4"></h3>
+            <div id="modal-body" class="text-gray-700 text-sm leading-relaxed border-t border-gray-100 pt-4"></div>
+            <div class="mt-6 text-right">
+                <button onclick="closeNewsModal()" class="bg-crcim-vinho text-white px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-crcim-vinhoscuro transition">
+                    Fechar Leitura
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LÓGICO E INTERATIVIDADE -->
+    <script>
+        // 1. LISTA OFICIAL DOS 28 MUNICÍPIOS AMZOP
+        const municipiosData = [
+            { name: "Ametista do Sul", site: "https://ametistadosul.rs.gov.br" },
+            { name: "Boa Vista das Missões", site: "https://boavistadasmissoes.rs.gov.br" },
+            { name: "Caiçara", site: "https://caicara.rs.gov.br" },
+            { name: "Cerro Grande", site: "https://cerrogrande.rs.gov.br" },
+            { name: "Chapada", site: "https://chapada.rs.gov.br" },
+            { name: "Cristal do Sul", site: "https://cristaldosul.rs.gov.br" },
+            { name: "Dois Irmãos das Missões", site: "https://doisirmaosdasmissoes.rs.gov.br" },
+            { name: "Erval Seco", site: "https://ervalseco.rs.gov.br" },
+            { name: "Frederico Westphalen", site: "https://fredericowestphalen.rs.gov.br" },
+            { name: "Iraí", site: "https://irai.rs.gov.br" },
+            { name: "Jaboticaba", site: "https://jaboticaba.rs.gov.br" },
+            { name: "Lajeado do Bugre", site: "https://lajeadodobugre.rs.gov.br" },
+            { name: "Liberato Salzano", site: "https://liberatosalzano.rs.gov.br" },
+            { name: "Novo Barreiro", site: "https://novobarreiro.rs.gov.br" },
+            { name: "Novo Tiradentes", site: "https://novotiradentes.rs.gov.br" },
+            { name: "Novo Xingu", site: "https://novoxingu.rs.gov.br" },
+            { name: "Palmeira das Missões", site: "https://palmeiradasmissoes.rs.gov.br" },
+            { name: "Palmitinho", site: "https://palmitinho.rs.gov.br" },
+            { name: "Pinhal", site: "https://pinhal.rs.gov.br" },
+            { name: "Pinheirinho do Vale", site: "https://pinheirinhodovale.rs.gov.br" },
+            { name: "Rodeio Bonito", site: "https://rodeiobonito.rs.gov.br" },
+            { name: "Sagrada Família", site: "https://sagradafamilia.rs.gov.br" },
+            { name: "São José das Missões", site: "https://saojosedasmissoes.rs.gov.br" },
+            { name: "São Pedro das Missões", site: "https://saopedrodasmissoes.rs.gov.br" },
+            { name: "Seberi", site: "https://seberi.rs.gov.br" },
+            { name: "Taquaruçu do Sul", site: "https://taquarucudosul.rs.gov.br" },
+            { name: "Vicente Dutra", site: "https://vicentedutra.rs.gov.br" },
+            { name: "Vista Alegre", site: "https://vistaalegre.rs.gov.br" }
+        ];
+
+        // 2. RENDERIZAR GRID DE MUNICÍPIOS
+        function renderMunicipios(list) {
+            const container = document.getElementById('grid-municipios');
+            container.innerHTML = '';
+            
+            list.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <h3 class="font-extrabold text-base text-crcim-vinho mb-3 pb-2 border-b border-gray-100 flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-crcim-dourado text-sm"></i>
+                            <span>${m.name}</span>
+                        </h3>
+                        <div class="space-y-1.5 text-xs text-gray-600 mb-4">
+                            <p class="flex items-center gap-2"><i class="fa-regular fa-building text-crcim-rubro"></i><span>Unidade Central de Controle Interno</span></p>
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-map-pin text-gray-400"></i><span>Região AMZOP - RS</span></p>
+                        </div>
+                    </div>
+                    <a href="${m.site}" target="_blank" rel="noopener" class="w-full bg-crcim-cinza hover:bg-crcim-vinho text-crcim-vinho hover:text-white font-bold py-2 px-3 rounded text-center transition text-xs border border-gray-200 block">
+                        <i class="fa-solid fa-globe mr-1"></i>Site do Município
+                    </a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 3. FILTRO DE BUSCA DE MUNICÍPIOS
+        function filterMunicipios() {
+            const query = document.getElementById('search-muni').value.toLowerCase();
+            const filtered = municipiosData.filter(m => m.name.toLowerCase().includes(query));
+            renderMunicipios(filtered);
+        }
+
+        // 4. CARROSSEL DA AGENDA DE EVENTOS COM PROGRESSO E PAUSA
+        let currentSlide = 0;
+        let isPaused = false;
+        const SLIDE_DURATION = 7000; // 7 segundos por evento
+        const UPDATE_INTERVAL = 50;  // Atualiza barra de progresso a cada 50ms
+        let elapsedTime = 0;
+        let timer = null;
+
+        const slides = document.querySelectorAll('.event-slide');
+        const dots = document.querySelectorAll('#carousel-dots button');
+        const progressBar = document.getElementById('carousel-progress');
+        const pauseIcon = document.getElementById('pause-icon');
+
+        function setSlide(index) {
+            slides[currentSlide].classList.add('hidden');
+            slides[currentSlide].classList.remove('block');
+            dots[currentSlide].classList.remove('bg-crcim-vinho');
+            dots[currentSlide].classList.add('bg-gray-300');
+
+            currentSlide = index;
+
+            slides[currentSlide].classList.remove('hidden');
+            slides[currentSlide].classList.add('block');
+            dots[currentSlide].classList.remove('bg-gray-300');
+            dots[currentSlide].classList.add('bg-crcim-vinho');
+
+            resetProgress();
+        }
+
+        function nextSlide() {
+            let next = (currentSlide + 1) % slides.length;
+            setSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = (currentSlide - 1 + slides.length) % slides.length;
+            setSlide(prev);
+        }
+
+        function resetProgress() {
+            elapsedTime = 0;
+            if (progressBar) progressBar.style.width = '0%';
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                pauseIcon.classList.remove('fa-pause');
+                pauseIcon.classList.add('fa-play');
+            } else {
+                pauseIcon.classList.remove('fa-play');
+                pauseIcon.classList.add('fa-pause');
+            }
+        }
+
+        function startTimer() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    elapsedTime += UPDATE_INTERVAL;
+                    const percentage = Math.min((elapsedTime / SLIDE_DURATION) * 100, 100);
+                    if (progressBar) progressBar.style.width = percentage + '%';
+
+                    if (elapsedTime >= SLIDE_DURATION) {
+                        nextSlide();
+                    }
+                }
+            }, UPDATE_INTERVAL);
+        }
+
+        // 5. MODAL DE NOTÍCIAS
+        function openNewsModal(title, content) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerHTML = content;
+            document.getElementById('modal-noticia').classList.remove('hidden');
+        }
+
+        function closeNewsModal() {
+            document.getElementById('modal-noticia').classList.add('hidden');
+        }
+
+        // 6. MENU MOBILE
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // INICIALIZAÇÃO
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMunicipios(municipiosData);
+            startTimer();
+        });
+
+        // 1. GERENCIAMENTO DO BANNER DE COOKIES (LGPD)
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('crcim_cookie_consent');
+            if (!consent) {
+                document.getElementById('cookie-banner').classList.remove('hidden');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('crcim_cookie_consent', 'accepted');
+            document.getElementById('cookie-banner').classList.add('hidden');
+        }
+
+        // 2. CONTEÚDO E ABERTURA DOS MODAIS INSTITUCIONAIS
+        const policyTexts = {
+            privacidade: {
+                title: "Política de Privacidade e Proteção de Dados (LGPD)",
+                content: `
+                    <p><strong>1. Informações Gerais:</strong> Este portal pertence ao Conselho Regional de Controladores Internos Municipais da Região da AMZOP (CRCIM-AMZOP). Comprometemo-nos a resguardar a privacidade e a proteção dos dados pessoais dos usuários nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+                    <p><strong>2. Uso de Cookies:</strong> Utilizamos apenas cookies estritamente necessários para o funcionamento técnico do site, análise anônima de acessos e armazenamento da sua preferência de cookies neste navegador.</p>
+                    <p><strong>3. Coleta de Dados Pessoais:</strong> O site não exige cadastro prévio para leitura de notícias e visualização dos municípios integrantes. Caso entre em contato via e-mail, seus dados serão utilizados exclusivamente para atendimento da demanda institucional.</p>
+                    <p><strong>4. Seus Direitos:</strong> Como titular dos dados, você pode solicitar esclarecimentos sobre o tratamento de informações através do e-mail oficial: <em>crcim@amzop.com.br</em>.</p>
+                `
+            },
+            termos: {
+                title: "Termos de Uso do Portal CRCIM-AMZOP",
+                content: `
+                    <p><strong>1. Aceitação dos Termos:</strong> Ao acessar e navegar pelo portal do CRCIM-AMZOP, o usuário concorda com as condições de uso aqui descritas.</p>
+                    <p><strong>2. Caráter Informativo:</strong> O conteúdo publicado (notícias, comunicados, links para sites municipais e agenda de eventos) possui caráter estritamente institucional e orientativo.</p>
+                    <p><strong>3. Direitos Autorais e Propriedade Intelectual:</strong> A marca, o logotipo institucional do CRCIM-AMZOP e os textos autorais pertencem à associação. É permitida a reprodução para fins acadêmicos e informativos, desde que citada a fonte.</p>
+                    <p><strong>4. Links Externos:</strong> O portal contém links direcionados a sites de prefeituras associadas, órgãos governamentais (TCE-RS, FAMURS, TCU, SICONFI) e redes sociais (Instagram). O CRCIM-AMZOP não se responsabiliza pelo conteúdo ou políticas de privacidade de terceiros.</p>
+                `
+            }
+        };
+
+        function openPolicyModal(type) {
+            const data = policyTexts[type];
+            if (!data) return;
+            
+            document.getElementById('policy-title').innerText = data.title;
+            document.getElementById('policy-body').innerHTML = data.content;
+            document.getElementById('modal-policy').classList.remove('hidden');
+        }
+
+        function closePolicyModal() {
+            document.getElementById('modal-policy').classList.add('hidden');
+        }
+
+        // Executar verificação ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkCookieConsent();
+        });
+    </script>
+</body>
+</html>
